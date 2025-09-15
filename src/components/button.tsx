@@ -1,6 +1,8 @@
 // type Color = "red" | "green" | "green"
 
-import type { JSX } from "react";
+import { useEffect, useRef, useState, type ComponentProps, type ComponentPropsWithoutRef, type ComponentPropsWithRef } from "react";
+
+// import type { JSX } from "react";
 
 
 // type ButtonProps = {
@@ -34,10 +36,75 @@ import type { JSX } from "react";
   // onClick: (val: string) => number;
 // }
 
-type ButtonProps = {
-  // children: React.ReactNode; // any type of children // elements + other data types
-  children: JSX.Element; // restricts to only elements
+// type ButtonProps = {
+//   children: React.ReactNode; // any type of children // elements + other data types
+   // children: JSX.Element; // restricts to only elements
+// }
+
+// type ButtonProps = {
+//   setCount: React.Dispatch<React.SetStateAction<number>>; // setState
+// }
+
+// if you have default values, no need to specify the type.
+
+// type URL = string; // can describe anything (default)
+// const url : URL = "https://google.com"
+
+// interface URL { // can only describe objects 
+//   url: string;
+// }
+// const url: URL = {
+//   url: "https://google.com",
+// }
+
+// type ButtonProps = ComponentProps<"button">; // accepts all props as button
+// type ButtonProps = ComponentPropsWithRef<"button">; // accept ref
+// type ButtonProps = ComponentPropsWithoutRef<"button">; // no ref
+
+
+// intersecting with `type` alias
+
+// type ButtonProps = {
+//   type: "button" | "submit" | "reset";
+//   color: "red" | "blue" | "green"
+// }
+
+// type SuperButtonProps = ButtonProps & {
+//   size: "md" | "lg"
+// }
+
+// extending with `interface` alias
+
+// interface ButtonProps {
+//   type: "button" | "submit" | "reset";
+//   color: "red" | "blue" | "green"
+// }
+
+// interface SuperButtonProps extends ButtonProps {
+//   size: "md" | "lg"
+// }
+
+type ButtonProps = {}
+
+// type User = {
+//   name: string;
+//   age: number;
+// }
+
+const buttonTextOptions = [
+  "Click me!",
+  "Click me again!",
+  "Click me one more time!"
+] as const; // makes it readonly
+
+type User = {
+  sessionId: string;
+  name: string;
 }
+
+type Guest = Omit<User, "name">;
+
+type ButtonColor = "red" | "blue" | "green"
 
 export default function Button({
     // backgroundColor,
@@ -50,8 +117,23 @@ export default function Button({
 
     // onClick
 
-  children
+  // children
+
+  // setCount
 }: ButtonProps) {
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => console.log(event)
+
+  // const [count, setCount] = useState(0); // typscript infers the datatype
+  // const [count, setCount] = useState<number>(0); // to be specific
+  // const [isPrimary, setIsPrimary] = useState(true);
+  const [user, setUser] = useState<User|null>(null);
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const previousButtonColor = localStorage.getItem("buttonColor") as ButtonColor; 
+  }, [])
+
   return (
     <div>
       <button 
@@ -63,8 +145,16 @@ export default function Button({
         // }}
         // style={style}
         // onClick ={onClick}
+
+        // onClick={(event) => { // hover over event to know the type
+        //   console.log("Clicked!")
+        // }}
+
+        onClick={handleClick}
+        ref = {ref}
       >
-        {children}
+        {/* {children} */}
+        Click me!
       </button>
     </div>
   )

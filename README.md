@@ -68,7 +68,15 @@ export default tseslint.config([
 ]);
 ```
 
-# To fix the warnings
+# Start a React + TypeScript + Vite Project
+
+1. Run below:
+
+```bash
+npm create vite@latest my-app -- --template react-ts
+```
+
+2. Fix the warnings by running below:
 
 ```bash
 npm install -D @types/react @types/react-dom
