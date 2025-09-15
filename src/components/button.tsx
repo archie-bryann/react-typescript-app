@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, type ComponentProps, type ComponentPropsWi
 
 // import type { JSX } from "react";
 
+import { type Color } from "../lib/types";
+
 
 // type ButtonProps = {
 //     backgroundColor?: Color;
@@ -84,7 +86,6 @@ import { useEffect, useRef, useState, type ComponentProps, type ComponentPropsWi
 //   size: "md" | "lg"
 // }
 
-type ButtonProps = {}
 
 // type User = {
 //   name: string;
@@ -106,7 +107,26 @@ type Guest = Omit<User, "name">;
 
 type ButtonColor = "red" | "blue" | "green"
 
-export default function Button({
+// Generics
+
+// const convertToArray = <T,>(value: T): T[] => {
+//   return [value]
+// }
+
+function convertToArray<T>(value: T): T[] {
+  return [value] 
+}
+
+convertToArray(5)
+convertToArray("Hello")
+
+type ButtonProps<T> = {
+  countValue: T;
+  countHistory: T[];
+  color: Color
+}
+
+export default function Button<T>({
     // backgroundColor,
     // textColor,
     // fontSize,
@@ -120,7 +140,10 @@ export default function Button({
   // children
 
   // setCount
-}: ButtonProps) {
+
+  countValue,
+  countHistory
+}: ButtonProps<T>) {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => console.log(event)
 
@@ -132,10 +155,23 @@ export default function Button({
 
   useEffect(() => {
     const previousButtonColor = localStorage.getItem("buttonColor") as ButtonColor; 
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos/1")
+    .then((response) => response.json())
+    .then((data: unknown) => {
+      console.log(data);
+      // data.name.toUpperCase();
+
+      // run it through Zod
+    })
+  }, []);
 
   return (
     <div>
+      <>{countValue}</>
+      <>{countHistory}</>
       <button 
         // style = {{
         //     backgroundColor,
